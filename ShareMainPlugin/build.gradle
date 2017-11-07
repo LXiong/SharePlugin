@@ -1,0 +1,87 @@
+apply plugin: rootProject.ext.plugins.application
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':Base')
+}
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file(rootProject.ext.signingConfigs.debugStoreFileValue)
+            storePassword rootProject.ext.signingConfigs.debugStorePasswordValue
+            keyAlias rootProject.ext.signingConfigs.debugKeyAliasValue
+            keyPassword rootProject.ext.signingConfigs.debugKeyPasswordValue
+        }
+        release {
+            storeFile file(rootProject.ext.signingConfigs.storeFileValue)
+            storePassword rootProject.ext.signingConfigs.storePasswordValue
+            keyAlias rootProject.ext.signingConfigs.keyAliasValue
+            keyPassword rootProject.ext.signingConfigs.keyPasswordValue
+        }
+    }
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+    dexOptions {
+        jumboMode = true
+    }
+    defaultConfig {
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        multiDexEnabled rootProject.ext.android.multiDexEnabled
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+List<String> flavors = new ArrayList<>();
+project.android.productFlavors.each { flavor ->
+    flavors.add(flavor.name)
+}
+boolean hasFlavors = flavors.size() > 0
+def date = new Date().format(rootProject.ext.customConfig.outputApkDateFormat)
+def outputApkPath = file("${buildDir}/outputsApks/")
+
+android.applicationVariants.all { variant ->
+    def taskName = variant.name
+    tasks.all {
+        if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
+            it.doLast {
+                copy {
+                    def fileNamePrefix = "${project.name}-${variant.baseName}"
+                    def newFileNamePrefix = hasFlavors ? "${fileNamePrefix}" : "${fileNamePrefix}-${date}"
+
+                    def destPath = hasFlavors ? file("${outputApkPath}/${project.name}-${date}/${variant.flavorName}") : outputApkPath
+                    from variant.outputs.outputFile
+                    into destPath
+                    rename { String fileName ->
+                        fileName.replace("${fileNamePrefix}.apk", "${newFileNamePrefix}.apk")
+                    }
+                }
+            }
+        }
+    }
+}

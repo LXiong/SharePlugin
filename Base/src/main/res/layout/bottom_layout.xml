@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottom_layout_height"
+    android:orientation="horizontal">
+
+    <include
+        android:id="@+id/base_title_tab0"
+        style="@style/bottom_tab_item_layout"
+        layout="@layout/bottom_tab_layout"></include>
+
+    <include
+        android:id="@+id/base_title_tab1"
+        style="@style/bottom_tab_item_layout"
+        layout="@layout/bottom_tab_layout"></include>
+
+    <include
+        android:id="@+id/base_title_tab2"
+        style="@style/bottom_tab_item_layout"
+        layout="@layout/bottom_tab_layout"></include>
+
+    <include
+        android:id="@+id/base_title_tab3"
+        style="@style/bottom_tab_item_layout"
+        layout="@layout/bottom_tab_layout"></include>
+
+    <include
+        android:id="@+id/base_title_tab4"
+        style="@style/bottom_tab_item_layout"
+        layout="@layout/bottom_tab_layout"></include>
+
+</LinearLayout>

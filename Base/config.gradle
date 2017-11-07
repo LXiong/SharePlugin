@@ -1,0 +1,56 @@
+ext {
+    //是否为生产环境
+    isPro = false
+    //Java版本
+    javaVersion = JavaVersion.VERSION_1_7
+
+    plugins = [
+            application: 'com.android.application',
+            library    : 'com.android.library',
+            maven      : 'com.github.dcendents.android-maven',
+            bintray    : 'com.jfrog.bintray'
+    ]
+
+    android = [
+            applicationId    : "com.tangzi.share",
+            compileSdkVersion: 25,
+            buildToolsVersion: "26.0.1",
+            minSdkVersion    : 15,
+            targetSdkVersion : 26,
+            versionCode      : 1,
+            versionName      : "1.1",
+            multiDexEnabled  : true
+    ]
+    dependencies = [
+            // library.
+            appCompat: 'com.android.support:appcompat-v7:26+',
+            design   : 'com.android.support:design:25.3.1',
+    ]
+
+    buildConfigField = [
+            // buildConfigField.
+            ROOT_URL        : "ROOT_URL",
+            PRO_ROOT_URL    : "http://tbk.tangzisoftware.com",
+            QA_ROOT_URL     : "http://tbkqa.tangzisoftware.com",
+
+            TITLE_SUFFIX    : "TITLE_SUFFIX",
+            PRO_TITLE_SUFFIX: "",
+            QA_TITLE_SUFFIX : "-测试版-"
+    ]
+    signingConfigs = [
+            debugStoreFileValue    : "../Base/base_debug.jks",
+            debugStorePasswordValue: '123456',
+            debugKeyAliasValue     : 'base_debug',
+            debugKeyPasswordValue  : '123456',
+            storeFileValue         : "../Base/base.jks",
+            storePasswordValue     : '123456',
+            keyAliasValue          : 'base',
+            keyPasswordValue       : '123456'
+    ]
+    customConfig = [
+            outputApkDateFormat: "yy-MM-dd-HH-mm-ss",
+            repluginName       : "TaoKeMainPlugin.jar",
+            outputRepluginPath : "../TaoKeHost/src/main/assets/plugins"
+    ]
+
+}

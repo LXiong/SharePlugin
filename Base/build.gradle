@@ -1,0 +1,23 @@
+apply plugin: rootProject.ext.plugins.library
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        buildConfigField "String", rootProject.ext.buildConfigField.ROOT_URL, "\"${getRootUrlValue()}\""
+        buildConfigField "String", rootProject.ext.buildConfigField.TITLE_SUFFIX, "\"${getTitleSuffixValue()}\""
+    }
+}
+
+def getRootUrlValue() {
+    return rootProject.ext.isPro ? rootProject.ext.buildConfigField.PRO_ROOT_URL : rootProject.ext.buildConfigField.QA_ROOT_URL
+}
+
+def getTitleSuffixValue() {
+    return rootProject.ext.isPro ? rootProject.ext.buildConfigField.PRO_TITLE_SUFFIX : rootProject.ext.buildConfigField.QA_TITLE_SUFFIX
+}
+dependencies {
+    compile rootProject.ext.dependencies.appCompat
+}
