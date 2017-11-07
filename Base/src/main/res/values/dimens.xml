@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="title_layout_width">100dp</dimen>
     <dimen name="title_layout_height">42dp</dimen>
     <dimen name="title_image_size">16dp</dimen>
     <dimen name="title_padding">16dp</dimen>

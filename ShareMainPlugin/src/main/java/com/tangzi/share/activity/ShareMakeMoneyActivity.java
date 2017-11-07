@@ -15,7 +15,13 @@ public class ShareMakeMoneyActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        setTitleText(getString(R.string.share_make_money));
+        setRightText(getString(R.string.income_detail));
+    }
 
+    @Override
+    protected void doRightClick() {
+        super.doRightClick();
     }
 
     @Override

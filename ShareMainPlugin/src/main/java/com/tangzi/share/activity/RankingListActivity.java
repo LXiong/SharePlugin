@@ -15,7 +15,7 @@ public class RankingListActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        hideTitleLayout();
     }
 
     @Override

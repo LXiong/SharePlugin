@@ -15,7 +15,7 @@ public class MyExpendActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        setTitleText(getString(R.string.my_expend));
     }
 
     @Override

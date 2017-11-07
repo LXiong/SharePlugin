@@ -1,6 +1,8 @@
 package com.tangzi.base.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -28,12 +30,13 @@ import com.tangzi.base.utils.LogUtils;
 import com.tangzi.base.utils.NetUtils;
 import com.tangzi.base.utils.BaseStringUtils;
 import com.tangzi.base.utils.TActivityManager;
+import com.tangzi.base.view.IBaseView;
 
 /**
  * Created by liubin on 2017/10/10.
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
     public static final String BUNDLE_EXTRA = "bundleExtra";
     private static final int TABS_SIZE = 5;
     protected Activity instance;
@@ -58,7 +61,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Fragment disconnectFragment;
     private int tabPos = 0;
     private boolean isConnected = false;
+    private ProgressDialog loadingDialog = null;
     protected Bundle bundle;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +118,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void showLoading() {
+        if (loadingDialog == null) {
+            loadingDialog = new ProgressDialog(this, R.style.Theme_AppCompat_Dialog_Alert);
+        }
+        if (loadingDialog != null && !loadingDialog.isShowing()) {
+            loadingDialog.show();
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+    }
+
     /**
      * 布局id
      * 需要子类重写
@@ -156,17 +178,33 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param leftImage  标题栏左侧图标
      * @param rightImage 标题栏右侧图标
      */
-    protected void initTitles(String leftTxt, String titleTxt, String rightTxt, int leftImage, int rightImage) {
+    private void initTitles(String leftTxt, String titleTxt, String rightTxt, int leftImage, int rightImage) {
         rootTitleLayout.setVisibility(View.VISIBLE);
+        setLeftTxt(leftTxt);
+        setTitleText(titleTxt);
+        setRightText(rightTxt);
+        setLeftImage(leftImage);
+        setRightImage(rightImage);
+    }
+
+    /**
+     * @param leftTxt    标题栏左侧文本
+     * @param titleTxt   标题栏中心文本
+     * @param rightTxt   标题栏右侧文本
+     * @param leftImage  标题栏左侧图标
+     * @param rightImage 标题栏右侧图标
+     */
+    private void setTitles(String leftTxt, String titleTxt, String rightTxt, int leftImage, int rightImage) {
+        initTitles(leftTxt, titleTxt, rightTxt, leftImage, rightImage);
+    }
+
+    /**
+     * @param leftTxt 标题栏左侧文本
+     */
+    protected void setLeftTxt(String leftTxt) {
         setViewVisible(leftTextView, BaseStringUtils.isNotBlank(leftTxt));
         leftTextView.setText(leftTxt);
-        setViewVisible(titleTextView, BaseStringUtils.isNotBlank(titleTxt));
-        titleTextView.setText(titleTxt);
-        setViewVisible(rightTextView, BaseStringUtils.isNotBlank(rightTxt));
-        rightTextView.setText(rightTxt);
-        setImageSource(leftImageView, leftImage);
-        setImageSource(rightImageView, rightImage);
-        if (BaseStringUtils.isNotBlank(leftTxt) || leftImage > 0) {
+        if (BaseStringUtils.isNotBlank(leftTxt)) {
             leftTitleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -174,7 +212,23 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             });
         }
-        if (BaseStringUtils.isNotBlank(rightTxt) || rightImage > 0) {
+    }
+
+    /**
+     * @param titleTxt 标题栏中心文本
+     */
+    protected void setTitleText(String titleTxt) {
+        setViewVisible(titleTextView, BaseStringUtils.isNotBlank(titleTxt));
+        titleTextView.setText(titleTxt);
+    }
+
+    /**
+     * @param rightTxt 标题栏右侧文本
+     */
+    protected void setRightText(String rightTxt) {
+        setViewVisible(rightTextView, BaseStringUtils.isNotBlank(rightTxt));
+        rightTextView.setText(rightTxt);
+        if (BaseStringUtils.isNotBlank(rightTxt)) {
             rightTitleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -182,6 +236,41 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             });
         }
+
+    }
+
+    /**
+     * @param leftImage 标题栏左侧图标
+     */
+    protected void setLeftImage(int leftImage) {
+        setImageSource(leftImageView, leftImage);
+        if (leftImage > 0) {
+            leftTitleLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    doLeftClick();
+                }
+            });
+        }
+    }
+
+    /**
+     * @param rightImage 标题栏右侧图标
+     */
+    protected void setRightImage(int rightImage) {
+        setImageSource(rightImageView, rightImage);
+        if (rightImage > 0) {
+            rightTitleLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    doRightClick();
+                }
+            });
+        }
+    }
+
+    protected void hideTitleLayout() {
+        rootTitleLayout.setVisibility(View.GONE);
     }
 
     private void selectedTabs() {
@@ -263,7 +352,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             imageView.setImageResource(resId);
             imageView.setVisibility(View.VISIBLE);
         } else {
-            imageView.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.GONE);
         }
     }
 
