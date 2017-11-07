@@ -1,4 +1,4 @@
-package com.tangzi.shareplugin;
+package com.tangzi.share;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

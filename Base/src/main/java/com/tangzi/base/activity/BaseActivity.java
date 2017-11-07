@@ -1,6 +1,8 @@
 package com.tangzi.base.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +22,8 @@ import android.widget.TextView;
 import com.tangzi.base.R;
 import com.tangzi.base.fragment.DisconnectFragment;
 import com.tangzi.base.receiver.NetworkReceiver;
+import com.tangzi.base.service.KeepLiveService;
+import com.tangzi.base.utils.KeepLiveManager;
 import com.tangzi.base.utils.LogUtils;
 import com.tangzi.base.utils.NetUtils;
 import com.tangzi.base.utils.BaseStringUtils;
@@ -30,6 +34,7 @@ import com.tangzi.base.utils.TActivityManager;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
+    public static final String BUNDLE_EXTRA = "bundleExtra";
     private static final int TABS_SIZE = 5;
     protected Activity instance;
     protected LinearLayout leftTitleLayout = null;
@@ -53,6 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Fragment disconnectFragment;
     private int tabPos = 0;
     private boolean isConnected = false;
+    protected Bundle bundle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         TActivityManager.getInstance().addActivity(this);
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        bundle = getIntent().getBundleExtra(BUNDLE_EXTRA);
         tabs = getTabs();
         initBase(getContentLayoutId());
         initView();
@@ -321,5 +328,17 @@ public abstract class BaseActivity extends AppCompatActivity {
             tabPos = pos;
             selectedTabs();
         }
+    }
+
+    public static void start(Context mContext, Bundle bundle, Class cls) {
+        Intent intent = new Intent(mContext, cls);
+        if (bundle != null) {
+            intent.putExtra(BUNDLE_EXTRA, bundle);
+        }
+        if (mContext instanceof Activity) {
+        } else {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        mContext.startActivity(intent);
     }
 }

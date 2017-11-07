@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">SharePlugin</string>
+
+    <string name="share_make_money">分享赚钱</string>
+    <string name="income_list">收益榜</string>
+    <string name="share_list">分享榜</string>
+    <string name="my_expend">我的推广</string>
+
+    <string name="income_detail">收益明细</string>
+    <string name="income_today">今日收益</string>
+    <string name="income_total">总收益</string>
+    <string name="share_members">分享人数</string>
+    <string name="to_share_make_money">去分享赚钱</string>
+    <string name="make_money_sec">赚钱小秘书</string>
+    <string name="to_share_make_money_desc">每天分享，收益越多</string>
+    <string name="make_money_sec_desc">教你如何来赚钱</string>
+    <string name="current_income_list">本月收入排行</string>
+    <string name="my_ranking">我的排名：</string>
+
+    <string name="current_month">本月</string>
+    <string name="last_month">上月</string>
+    <string name="query_wallet">查看钱包</string>
+    <string name="invite_members">邀请人数</string>
+    <string name="expend_level">推广等级</string>
+    <string name="to_expend_make_money">去推广赚钱</string>
+    <string name="account_income">用户收益</string>
+    <string name="income_desc">收益说明</string>
+    <string name="level">等级</string>
+    <string name="members">人数</string>
+    <string name="diamond">钻石</string>
+    <string name="not_diamond">非钻石</string>
+    <string name="total">总计</string>
+    <string name="custom_service">客服服务</string>
 </resources>
